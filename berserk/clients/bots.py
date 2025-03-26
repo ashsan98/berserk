@@ -96,3 +96,81 @@ class Bots(BaseClient):
         path = f"/api/challenge/{challenge_id}/decline"
         payload = {"reason": reason}
         self._r.post(path, json=payload)
+
+    def handle_draw_offer(self, game_id: str, accept: bool) -> None:
+        """Create, accept, or decline a draw offer.
+
+        To offer a draw, pass ``accept=True`` and a game ID of an in-progress
+        game. To response to a draw offer, pass either ``accept=True`` or
+        ``accept=False`` and the ID of a game in which you have received a
+        draw offer.
+
+        Often, it's easier to call :func:`offer_draw`, :func:`accept_draw`, or
+        :func:`decline_draw`.
+
+        :param game_id: ID of an in-progress game
+        :param accept: whether to accept
+        """
+        accept_str = "yes" if accept else "no"
+        path = f"/api/board/game/{game_id}/draw/{accept_str}"
+        self._r.post(path)
+
+    def offer_draw(self, game_id: str) -> None:
+        """Offer a draw in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_draw_offer(game_id, True)
+
+    def accept_draw(self, game_id: str) -> None:
+        """Accept an already offered draw in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_draw_offer(game_id, True)
+
+    def decline_draw(self, game_id: str) -> None:
+        """Decline an already offered draw in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_draw_offer(game_id, False)
+
+    def handle_takeback_offer(self, game_id: str, accept: bool) -> None:
+        """Create, accept, or decline a takeback offer.
+
+        To offer a takeback, pass ``accept=True`` and a game ID of an in-progress
+        game. To response to a takeback offer, pass either ``accept=True`` or
+        ``accept=False`` and the ID of a game in which you have received a
+        takeback offer.
+
+        Often, it's easier to call :func:`offer_takeback`, :func:`accept_takeback`, or
+        :func:`decline_takeback`.
+
+        :param game_id: ID of an in-progress game
+        :param accept: whether to accept
+        """
+        accept_str = "yes" if accept else "no"
+        path = f"/api/board/game/{game_id}/takeback/{accept_str}"
+        self._r.post(path)
+
+    def offer_takeback(self, game_id: str) -> None:
+        """Offer a takeback in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_takeback_offer(game_id, True)
+
+    def accept_takeback(self, game_id: str) -> None:
+        """Accept an already offered takeback in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_takeback_offer(game_id, True)
+
+    def decline_takeback(self, game_id: str) -> None:
+        """Decline an already offered takeback in the given game.
+
+        :param game_id: ID of an in-progress game
+        """
+        self.handle_takeback_offer(game_id, False)
